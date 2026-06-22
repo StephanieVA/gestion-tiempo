@@ -1,0 +1,278 @@
+<div class="container">
+  <h1>Cuestionario de Gestión del Tiempo Personal y Académico</h1>
+  <p>
+    Estimados estudiantes, este cuestionario tiene el propósito de identificar
+    las actividades que realizan durante sus <b>horas extracurriculares</b> en
+    su vida diaria. La información recopilada nos ayudará a conocer cómo emplean
+    su tiempo libre, identificar hábitos saludables y áreas de mejora. Por lo
+    que, se les pide que dispongan un tiempo para rellenar con conciencia este
+    cuestionario.
+  </p>
+
+  <h2>a. Datos personales</h2>
+
+  <div class="datos">
+    <div class="campo">
+      <label> Apellidos y nombres </label>
+
+      <input [ngModel]="persona.nombre" readonly />
+    </div>
+
+    <div class="campo">
+      <label> Edad </label>
+
+      <input type="number" [(ngModel)]="persona.edad" />
+    </div>
+
+    <div class="campo">
+      <label> Sexo </label>
+
+      <select [(ngModel)]="persona.sexo">
+        <option value="">Seleccionar</option>
+
+        <option>Femenino</option>
+
+        <option>Masculino</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label> Semestre </label>
+
+      <input [(ngModel)]="persona.semestre" />
+    </div>
+  </div>
+
+  <!-- INDICACIÓN -->
+
+  <h2>b. Indicación</h2>
+
+  <div class="indicacion">
+    <p>
+      Rellena la cantidad de horas por día que inviertes en cada actividad
+      detallada en los siguientes cuadros.
+    </p>
+  </div>
+
+  <!-- ================= PREGUNTA 1 ================= -->
+
+  <div class="bloque-pregunta pregunta1">
+    <div class="numero-pregunta">1</div>
+
+    <div class="texto-pregunta">
+      <h3>
+        ¿QUÉ TIEMPO INVIERTES EN REALIZAR TUS TAREAS O TRABAJOS ACADÉMICOS EN
+        CADA CURSO?
+      </h3>
+    </div>
+  </div>
+
+  <table border="1">
+    <tr>
+      <th>Curso</th>
+
+      <th *ngFor="let d of dias">
+        {{ d }}
+      </th>
+    </tr>
+
+    <!-- cursos fijos -->
+
+    <tr *ngFor="let a of seccion1">
+      <td>{{ a }}</td>
+
+      <td *ngFor="let d of dias">
+        <input type="number" [(ngModel)]="datos[a][d]" min="0" />
+      </td>
+    </tr>
+
+    <!-- cursos agregados -->
+
+    <tr *ngFor="let o of extras[1]">
+      <td>
+        <input [(ngModel)]="o.nombre" placeholder="Escriba asignatura" />
+      </td>
+
+      <td *ngFor="let d of dias">
+        <input type="number" [(ngModel)]="o.horas[d]" min="0" />
+      </td>
+    </tr>
+  </table>
+
+  <button class="btn-agregar" (click)="agregarActividad(1)">
+    + Agregar actividad
+  </button>
+
+  <!-- ================= PREGUNTA 2 ================= -->
+
+  <div class="bloque-pregunta pregunta2">
+    <div class="numero-pregunta">2</div>
+
+    <div class="texto-pregunta">
+      <h3>¿QUÉ TIEMPO INVIERTES EN ESTUDIAR CADA CURSO?</h3>
+    </div>
+  </div>
+
+  <table border="1">
+    <tr>
+      <th>Actividad</th>
+
+      <th *ngFor="let d of dias">
+        {{ d }}
+      </th>
+    </tr>
+
+    <tr *ngFor="let a of seccion2">
+      <td>
+        {{ a.replace(" (Estudio)", "") }}
+      </td>
+
+      <td *ngFor="let d of dias">
+        <input type="number" [(ngModel)]="datos[a][d]" min="0" />
+      </td>
+    </tr>
+
+    <tr *ngFor="let o of extras[2]">
+      <td>
+        <input [(ngModel)]="o.nombre" placeholder="Escriba actividad" />
+      </td>
+
+      <td *ngFor="let d of dias">
+        <input type="number" [(ngModel)]="o.horas[d]" min="0" />
+      </td>
+    </tr>
+  </table>
+
+  <button class="btn-agregar" (click)="agregarActividad(2)">
+    + Agregar actividad
+  </button>
+
+  <!-- ================= PREGUNTA 3 ================= -->
+
+  <div class="bloque-pregunta pregunta3">
+    <div class="numero-pregunta">3</div>
+
+    <div class="texto-pregunta">
+      <h3>
+        ¿QUÉ TIEMPO INVIERTES EN REALIZAR LAS SIGUIENTES ACTIVIDADES
+        EXTRACURRICULARES?
+      </h3>
+    </div>
+  </div>
+
+  <table border="1">
+    <tr>
+      <th>Actividad</th>
+
+      <th *ngFor="let d of dias">
+        {{ d }}
+      </th>
+    </tr>
+
+    <tr *ngFor="let a of seccion3">
+      <td>{{ a }}</td>
+
+      <td *ngFor="let d of dias">
+        <input type="number" [(ngModel)]="datos[a][d]" min="0" />
+      </td>
+    </tr>
+
+    <tr *ngFor="let o of extras[3]">
+      <td>
+        <input [(ngModel)]="o.nombre" placeholder="Escriba actividad" />
+      </td>
+
+      <td *ngFor="let d of dias">
+        <input type="number" [(ngModel)]="o.horas[d]" min="0" />
+      </td>
+    </tr>
+  </table>
+
+  <button class="btn-agregar" (click)="agregarActividad(3)">
+    + Agregar actividad
+  </button>
+
+  <!-- ================= PREGUNTA 4 ================= -->
+
+  <div class="bloque-pregunta pregunta4">
+    <div class="numero-pregunta">4</div>
+
+    <div class="texto-pregunta">
+      <h3>
+        ¿QUÉ TIEMPO DEDICAS DIARIAMENTE EN REALIZAR TUS ACTIVIDADES PERSONALES?
+      </h3>
+    </div>
+  </div>
+
+  <table border="1">
+    <tr>
+      <th>Actividad</th>
+
+      <th *ngFor="let d of dias">
+        {{ d }}
+      </th>
+    </tr>
+
+    <tr *ngFor="let a of seccion4">
+      <td>{{ a }}</td>
+
+      <td *ngFor="let d of dias">
+        <input type="number" [(ngModel)]="datos[a][d]" min="0" />
+      </td>
+    </tr>
+
+    <tr *ngFor="let o of extras[4]">
+      <td>
+        <input [(ngModel)]="o.nombre" placeholder="Escriba actividad" />
+      </td>
+
+      <td *ngFor="let d of dias">
+        <input type="number" [(ngModel)]="o.horas[d]" min="0" />
+      </td>
+    </tr>
+  </table>
+
+  <button class="btn-agregar" (click)="agregarActividad(4)">
+    + Agregar actividad
+  </button>
+
+  <!-- ================= PREGUNTA 5 ================= -->
+
+  <div class="bloque-pregunta pregunta5">
+    <div class="numero-pregunta">5</div>
+
+    <div class="texto-pregunta">
+      <h3>
+        1. ¿QUÉ OTRAS ACTIVIDADES REALIZAS DIARIAMENTE Y CUANTO TIEMPO INVIERTES
+        EN CADA UNA DE ELLAS?
+      </h3>
+    </div>
+  </div>
+
+  <table border="1">
+    <tr>
+      <th>Actividad</th>
+
+      <th *ngFor="let d of dias">
+        {{ d }}
+      </th>
+    </tr>
+
+    <tr *ngFor="let o of extras[5]">
+      <td>
+        <input [(ngModel)]="o.nombre" placeholder="Escriba actividad" />
+      </td>
+
+      <td *ngFor="let d of dias">
+        <input type="number" [(ngModel)]="o.horas[d]" min="0" />
+      </td>
+    </tr>
+  </table>
+
+  <button class="btn-agregar" (click)="agregarActividad(5)">
+    + Agregar actividad
+  </button>
+  <div class="guardar">
+    <button (click)="guardar()">Guardar Cuestionario</button>
+  </div>
+</div>
