@@ -19,23 +19,31 @@ import { RespuestasService } from '../../services/respuestas.service';
 export class CuestionarioComponent {
   platformId = inject(PLATFORM_ID);
 
+  // No se requiere autenticar para responder, pero el template anterior quedó con *ngIf.
+  // Mantener la variable para evitar errores de compilación.
+  isLoggedIn = true;
+
   constructor(private api: RespuestasService) {
     if (isPlatformBrowser(this.platformId)) {
+      // No se requiere autenticación para responder.
+      // Si existe usuario en localStorage, se precarga, si no, se deja vacío.
       const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
 
       this.persona = {
         id: usuario.id || 0,
-
         nombre: usuario.nombres || '',
-
         edad: usuario.edad || '',
-
         sexo: usuario.sexo || '',
-
         semestre: usuario.semestre || '',
       };
+
+      this.aplicarCursosPorSemestre();
+      this.inicializar();
+      return;
     }
 
+    // En SSR no hay localStorage.
+    this.aplicarCursosPorSemestre();
     this.inicializar();
   }
 
@@ -51,6 +59,15 @@ export class CuestionarioComponent {
     semestre: '',
   };
 
+  // Curso II ciclo para reemplazo en preguntas 1 y 2
+  cursosIiCicloPregunta1 = [
+    'MATEMÁTICA BÁSICA',
+    'CULTURA Y SOCIEDAD',
+    'ECOLOGÍA Y MEDIO AMBIENTE',
+    'ECONOMÍA Y RECURSOS NATURALES',
+    'DESARROLLO DE VIDA Y CULTURA UNIVERSITARIA',
+  ];
+
   dias = [
     'Lunes',
     'Martes',
@@ -61,7 +78,7 @@ export class CuestionarioComponent {
     'Domingo',
   ];
 
-  seccion1 = [
+  seccion1: string[] = [
     'Relaciones interpersonales',
 
     'Realidad nacional y globalización',
@@ -73,7 +90,7 @@ export class CuestionarioComponent {
     'Comprensión lectora y redacción',
   ];
 
-  seccion2 = [
+  seccion2: string[] = [
     'Relaciones interpersonales (Estudio)',
 
     'Realidad nacional y globalización (Estudio)',
@@ -119,7 +136,38 @@ export class CuestionarioComponent {
 
   datos: any = {};
 
+  aplicarCursosPorSemestre() {
+    const esIiCiclo =
+      String(this.persona.semestre || '')
+        .trim()
+        .toUpperCase() === 'II CICLO';
+
+    if (esIiCiclo) {
+      this.seccion1 = [...this.cursosIiCicloPregunta1];
+      this.seccion2 = this.cursosIiCicloPregunta1.map((c) => `${c} (Estudio)`);
+    } else {
+      this.seccion1 = [
+        'Relaciones interpersonales',
+        'Realidad nacional y globalización',
+        'Filosofía y ética',
+        'Propedéutica',
+        'Comprensión lectora y redacción',
+      ];
+
+      this.seccion2 = [
+        'Relaciones interpersonales (Estudio)',
+        'Realidad nacional y globalización (Estudio)',
+        'Filosofía y ética (Estudio)',
+        'Propedéutica (Estudio)',
+        'Comprensión lectora y redacción (Estudio)',
+      ];
+    }
+  }
+
   inicializar() {
+    // Se recalculan secciones 1 y 2 según el semestre (solo pregunta 1 y 2)
+    this.aplicarCursosPorSemestre();
+
     this.datos = {};
 
     const todas = [

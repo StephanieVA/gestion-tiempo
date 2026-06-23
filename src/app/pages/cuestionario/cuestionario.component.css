@@ -1,8 +1,7 @@
 /* Fondo */
 
 :host{
-
-display:block;
+	display:block;
 
 background:#f5f7fb;
 
@@ -10,11 +9,9 @@ min-height:100vh;
 
 padding:30px;
 
-font-family:
-'Segoe UI',
-sans-serif;
-
+font-family:'Segoe UI',sans-serif;
 }
+
 
 /* Contenedor */
 

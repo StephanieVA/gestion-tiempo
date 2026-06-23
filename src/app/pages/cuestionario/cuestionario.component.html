@@ -1,5 +1,6 @@
 <div class="container">
   <h1>Cuestionario de Gestión del Tiempo Personal y Académico</h1>
+
   <p>
     Estimados estudiantes, este cuestionario tiene el propósito de identificar
     las actividades que realizan durante sus <b>horas extracurriculares</b> en
@@ -39,7 +40,13 @@
     <div class="campo">
       <label> Semestre </label>
 
-      <input [(ngModel)]="persona.semestre" />
+      <select [(ngModel)]="persona.semestre">
+        <option value="">Seleccionar</option>
+        <option value="I ciclo">I ciclo</option>
+        <option value="II ciclo">II ciclo</option>
+        <option value="III ciclo">III ciclo</option>
+        <option value="IV ciclo">IV ciclo</option>
+      </select>
     </div>
   </div>
 
@@ -188,10 +195,6 @@
     </tr>
   </table>
 
-  <button class="btn-agregar" (click)="agregarActividad(3)">
-    + Agregar actividad
-  </button>
-
   <!-- ================= PREGUNTA 4 ================= -->
 
   <div class="bloque-pregunta pregunta4">
@@ -232,10 +235,6 @@
     </tr>
   </table>
 
-  <button class="btn-agregar" (click)="agregarActividad(4)">
-    + Agregar actividad
-  </button>
-
   <!-- ================= PREGUNTA 5 ================= -->
 
   <div class="bloque-pregunta pregunta5">
@@ -243,8 +242,8 @@
 
     <div class="texto-pregunta">
       <h3>
-        1. ¿QUÉ OTRAS ACTIVIDADES REALIZAS DIARIAMENTE Y CUANTO TIEMPO INVIERTES
-        EN CADA UNA DE ELLAS?
+        ¿QUÉ OTRAS ACTIVIDADES REALIZAS DIARIAMENTE Y CUANTO TIEMPO INVIERTES EN
+        CADA UNA DE ELLAS?
       </h3>
     </div>
   </div>

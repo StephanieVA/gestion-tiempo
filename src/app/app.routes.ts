@@ -4,6 +4,8 @@ import { LoginComponent } from './pages/login/login.component';
 
 import { CuestionarioComponent } from './pages/cuestionario/cuestionario.component';
 
+import { ReportesComponent } from './pages/reportes/reportes.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -13,5 +15,10 @@ export const routes: Routes = [
   {
     path: 'cuestionario',
     component: CuestionarioComponent,
+  },
+
+  {
+    path: 'reportes',
+    component: ReportesComponent,
   },
 ];

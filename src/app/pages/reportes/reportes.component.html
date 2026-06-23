@@ -1,0 +1,128 @@
+<div class="page">
+  <div class="container">
+    <h1>Reportes - Gestión del Tiempo</h1>
+
+    <div class="filters">
+      <label>Ciclo/semestre:</label>
+      <select [(ngModel)]="cicloSeleccionado" (change)="cargar()">
+        <option value="">Todos</option>
+        <option *ngFor="let c of ciclos" [value]="c">{{ c }}</option>
+      </select>
+
+      <button class="btn" (click)="cargar()" [disabled]="loading">
+        Actualizar
+      </button>
+
+      <button
+        class="btn"
+        (click)="exportarExcel()"
+        [disabled]="loading || !estudiantes.length"
+      >
+        Exportar Excel
+      </button>
+
+      <button
+        class="btn btn-secondary"
+        (click)="cerrarSesion()"
+        [disabled]="loading"
+      >
+        Cerrar sesión
+      </button>
+    </div>
+
+    <div class="status" *ngIf="loading">Cargando...</div>
+    <div class="status error" *ngIf="error">{{ error }}</div>
+
+    <div class="students" *ngIf="!loading && estudiantes.length">
+      <div class="pagination" *ngIf="totalPaginas > 1">
+        <button
+          class="btn"
+          (click)="cambiarPagina(-1)"
+          [disabled]="paginaActual <= 1"
+        >
+          <
+        </button>
+        <span class="page-info"
+          >Página {{ paginaActual }} de {{ totalPaginas }}</span
+        >
+        <button
+          class="btn"
+          (click)="cambiarPagina(1)"
+          [disabled]="paginaActual >= totalPaginas"
+        >
+          >
+        </button>
+      </div>
+
+      <div class="student" *ngFor="let est of estudiantesPaginados">
+        <h2 class="student-title">{{ est.nombres }}</h2>
+
+        <section class="report">
+          <h3>Reporte 1 (Preguntas 1 y 2)</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Día</th>
+                  <th>Total horas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let d of dias">
+                  <td>{{ d }}</td>
+                  <td>{{ est.reporte1[d] || 0 }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="report">
+          <h3>Reporte 2 (Preguntas 3, 4 y 5)</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Día</th>
+                  <th>Total horas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let d of dias">
+                  <td>{{ d }}</td>
+                  <td>{{ est.reporte2[d] || 0 }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="report final">
+          <h3>Reporte final (Preguntas 1..5)</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Día</th>
+                  <th>Total horas</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let d of dias">
+                  <td>{{ d }}</td>
+                  <td>{{ est.reporteFinal[d] || 0 }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="divider"></div>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && !estudiantes.length" class="empty">
+      No hay respuestas para mostrar.
+    </div>
+  </div>
+</div>
