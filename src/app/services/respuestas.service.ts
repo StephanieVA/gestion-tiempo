@@ -10,10 +10,10 @@ export class RespuestasService {
 
   //cursosApi = 'http://localhost:3000/api/cursos';
 
-  api = 'https://backend-gestion-production-1e84.up.railway.app/api/respuestas';
+  api = 'https://backend-gestion-production-b3b7.up.railway.app/api/respuestas';
 
   cursosApi =
-    'https://backend-gestion-production-1e84.up.railway.app/api/cursos';
+    'https://backend-gestion-production-b3b7.up.railway.app/api/cursos';
   constructor(private http: HttpClient) {}
 
   guardar(data: any) {
