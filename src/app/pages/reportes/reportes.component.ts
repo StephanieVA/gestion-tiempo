@@ -106,7 +106,7 @@ export class ReportesComponent {
     const token = this.getTokenLocal();
 
     this.http
-      .get<any>(`http://localhost:3000/api/reportes/por-ciclo${qs}`, {
+      .get<any>(`https://backend-gestion-production-b3b7.up.railway.app/api/reportes/por-ciclo${qs}`, {
         headers: token
           ? ({ Authorization: `Bearer ${token}` } as any)
           : undefined,
@@ -154,7 +154,7 @@ export class ReportesComponent {
     const token = this.getTokenLocal();
 
     this.http
-      .get(`http://localhost:3000/api/reportes/exportar-excel${qs}`, {
+      .get(`https://backend-gestion-production-b3b7.up.railway.app/api/reportes/exportar-excel${qs}`, {
         headers: token
           ? ({ Authorization: `Bearer ${token}` } as any)
           : undefined,
