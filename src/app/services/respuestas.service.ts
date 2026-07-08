@@ -6,10 +6,14 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class RespuestasService {
-  api = 'http://localhost:3000/api/respuestas';
+  //api = 'http://localhost:3000/api/respuestas';
 
-  cursosApi = 'http://localhost:3000/api/cursos';
+  //cursosApi = 'http://localhost:3000/api/cursos';
 
+  api = 'https://backend-gestion-production-1e84.up.railway.app/api/respuestas';
+
+  cursosApi =
+    'https://backend-gestion-production-1e84.up.railway.app/api/cursos';
   constructor(private http: HttpClient) {}
 
   guardar(data: any) {

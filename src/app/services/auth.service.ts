@@ -6,7 +6,8 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class AuthService {
-  api = 'http://localhost:3000/api/auth';
+  //api = 'http://localhost:3000/api/auth';
+  api = 'https://backend-gestion-production-1e84.up.railway.app/api/auth';
 
   constructor(private http: HttpClient) {}
 
