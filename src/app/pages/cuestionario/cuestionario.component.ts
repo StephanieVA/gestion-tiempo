@@ -19,31 +19,24 @@ import { RespuestasService } from '../../services/respuestas.service';
 export class CuestionarioComponent {
   platformId = inject(PLATFORM_ID);
 
-  // No se requiere autenticar para responder, pero el template anterior quedó con *ngIf.
-  // Mantener la variable para evitar errores de compilación.
-  isLoggedIn = true;
-
   constructor(private api: RespuestasService) {
     if (isPlatformBrowser(this.platformId)) {
-      // No se requiere autenticación para responder.
-      // Si existe usuario en localStorage, se precarga, si no, se deja vacío.
-      const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-
+      // Cuestionario público: NO depende de sesión.
+      // Se deja persona base (id=0) y semestre vacío hasta que el usuario lo seleccione.
+      const storedSemestre = localStorage.getItem('semestre') || '';
       this.persona = {
-        id: usuario.id || 0,
-        nombre: usuario.nombres || '',
-        edad: usuario.edad || '',
-        sexo: usuario.sexo || '',
-        semestre: usuario.semestre || '',
+        id: 0,
+        nombre: '',
+        edad: '',
+        sexo: '',
+        semestre: storedSemestre,
       };
 
-      this.aplicarCursosPorSemestre();
       this.inicializar();
       return;
     }
 
-    // En SSR no hay localStorage.
-    this.aplicarCursosPorSemestre();
+    // En SSR: solo inicializar estructura
     this.inicializar();
   }
 
@@ -59,14 +52,7 @@ export class CuestionarioComponent {
     semestre: '',
   };
 
-  // Curso II ciclo para reemplazo en preguntas 1 y 2
-  cursosIiCicloPregunta1 = [
-    'MATEMÁTICA BÁSICA',
-    'CULTURA Y SOCIEDAD',
-    'ECOLOGÍA Y MEDIO AMBIENTE',
-    'ECONOMÍA Y RECURSOS NATURALES',
-    'DESARROLLO DE VIDA Y CULTURA UNIVERSITARIA',
-  ];
+  cargandoCursos = false;
 
   dias = [
     'Lunes',
@@ -78,29 +64,10 @@ export class CuestionarioComponent {
     'Domingo',
   ];
 
-  seccion1: string[] = [
-    'Relaciones interpersonales',
+  // Por defecto (I ciclo) - se reemplaza al cargar cursos desde la API.
+  seccion1: string[] = [];
 
-    'Realidad nacional y globalización',
-
-    'Filosofía y ética',
-
-    'Propedéutica',
-
-    'Comprensión lectora y redacción',
-  ];
-
-  seccion2: string[] = [
-    'Relaciones interpersonales (Estudio)',
-
-    'Realidad nacional y globalización (Estudio)',
-
-    'Filosofía y ética (Estudio)',
-
-    'Propedéutica (Estudio)',
-
-    'Comprensión lectora y redacción (Estudio)',
-  ];
+  seccion2: string[] = [];
 
   seccion3 = [
     'Deporte',
@@ -123,7 +90,22 @@ export class CuestionarioComponent {
     'Familia',
   ];
 
+  // Por compatibilidad con el cuestionario original: si la API no devuelve cursos,
+  // se cargan estos cursos por defecto (I ciclo).
+  private cursosPorDefectoI = [
+    'Relaciones interpersonales',
+    'Realidad nacional y globalización',
+    'Filosofía y ética',
+    'Propedéutica',
+    'Comprensión lectora y redacción',
+  ];
+
+  private cursosPorDefectoIParaPregunta2 = this.cursosPorDefectoI.map(
+    (c) => `${c} (Estudio)`,
+  );
+
   // Para cada pregunta (1..5), se puede agregar una lista dinámica de asignaturas/actividades.
+
   extras: {
     [key: number]: { nombre: string; horas: Record<string, number> }[];
   } = {
@@ -136,38 +118,76 @@ export class CuestionarioComponent {
 
   datos: any = {};
 
-  aplicarCursosPorSemestre() {
-    const esIiCiclo =
-      String(this.persona.semestre || '')
-        .trim()
-        .toUpperCase() === 'II CICLO';
+  private normalizarCiclo(ciclo: string) {
+    return String(ciclo || '').trim();
+  }
+  private obtenerCicloBD(semestre: string): string {
+    switch (semestre) {
+      case 'I':
+        return 'I';
+      case 'II':
+        return 'II';
+      case 'III':
+        return 'III';
+      case 'IV':
+        return 'IV';
+      case 'V':
+        return 'V';
+      case 'VI':
+        return 'VI';
+      case 'VII':
+        return 'VII';
+      case 'VIII':
+        return 'VIII';
+      case 'IX':
+        return 'IX';
+      case 'X':
+        return 'X';
+      default:
+        return 'I';
+    }
+  }
 
-    if (esIiCiclo) {
-      this.seccion1 = [...this.cursosIiCicloPregunta1];
-      this.seccion2 = this.cursosIiCicloPregunta1.map((c) => `${c} (Estudio)`);
-    } else {
-      this.seccion1 = [
-        'Relaciones interpersonales',
-        'Realidad nacional y globalización',
-        'Filosofía y ética',
-        'Propedéutica',
-        'Comprensión lectora y redacción',
-      ];
+  private async cargarCursosPorCiclo() {
+    // Si no se seleccionó semestre, asumimos I ciclo por defecto.
+    // En UI viene como "I ciclo" / "II ciclo".
+    // En BD la columna `ciclo` guarda el romano: 'I' o 'II'.
+    const cicloBD = this.obtenerCicloBD(this.persona.semestre);
+    console.log('Consultando ciclo:', cicloBD);
 
-      this.seccion2 = [
-        'Relaciones interpersonales (Estudio)',
-        'Realidad nacional y globalización (Estudio)',
-        'Filosofía y ética (Estudio)',
-        'Propedéutica (Estudio)',
-        'Comprensión lectora y redacción (Estudio)',
-      ];
+    // fallback para mantener compatibilidad si la API devuelve vacío.
+    // Si la API devuelve vacío para un ciclo, mantenemos lo que corresponda a ese ciclo.
+    // - Para I: usamos cursos por defecto I
+    // - Para II: usamos cursos por defecto I (por compatibilidad) pero NO deberías ver esto
+    //   si tu BD ya trae datos reales para II.
+    let nombresFallback: string[] = [...this.cursosPorDefectoI];
+
+    this.cargandoCursos = true;
+
+    try {
+      const resp: any = await this.api.getCursosByCiclo(cicloBD).toPromise();
+
+      const cursos = resp?.cursos ?? [];
+      const nombres = cursos.map((c: any) => c.nombre).filter(Boolean);
+
+      const nombresFinales = nombres.length ? nombres : nombresFallback;
+
+      // Pregunta 1
+      this.seccion1 = [...nombresFinales];
+
+      // Pregunta 2 (vista con etiqueta)
+      this.seccion2 = nombresFinales.map((n: string) => `${n} (Estudio)`);
+    } catch (e) {
+      console.log(e);
+      alert('Error al cargar cursos');
+      this.seccion1 = [];
+      this.seccion2 = [];
+    } finally {
+      this.cargandoCursos = false;
     }
   }
 
   inicializar() {
-    // Se recalculan secciones 1 y 2 según el semestre (solo pregunta 1 y 2)
-    this.aplicarCursosPorSemestre();
-
     this.datos = {};
 
     const todas = [
@@ -208,6 +228,16 @@ export class CuestionarioComponent {
     this.extras[pregunta].push(nueva);
   }
 
+  onSemestreChange() {
+    // Importante: primero actualizamos las secciones desde la API (P1 y P2)
+    // y luego reconstruimos el objeto `datos` para que el template refleje el cambio.
+    this.cargarCursosPorCiclo().then(() => {
+      // Forzar que Angular detecte cambios y vuelva a renderizar.
+      this.datos = {};
+      this.inicializar();
+    });
+  }
+
   guardar() {
     let respuestas: any[] = [];
 
@@ -223,15 +253,13 @@ export class CuestionarioComponent {
           if (horas > 0) {
             respuestas.push({
               estudiante_id: this.persona.id,
-
+              name_estudiante: this.persona.nombre,
+              semestre: this.persona.semestre,
               seccion,
 
               categoria: a,
-
               actividad: a,
-
               dia: d,
-
               horas,
             });
           }
@@ -257,15 +285,13 @@ export class CuestionarioComponent {
             if (horas > 0) {
               respuestas.push({
                 estudiante_id: this.persona.id,
-
+                name_estudiante: this.persona.nombre,
+                semestre: this.persona.semestre,
                 seccion: pregunta,
 
                 categoria: 'Actividades agregadas',
-
                 actividad: o.nombre,
-
                 dia: d,
-
                 horas,
               });
             }

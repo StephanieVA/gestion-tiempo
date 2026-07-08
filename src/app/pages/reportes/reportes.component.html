@@ -4,27 +4,33 @@
 
     <div class="filters">
       <label>Ciclo/semestre:</label>
-      <select [(ngModel)]="cicloSeleccionado" (change)="cargar()">
+      <select [(ngModel)]="cicloSeleccionado" (change)="onCambioSemestre()">
         <option value="">Todos</option>
-        <option *ngFor="let c of ciclos" [value]="c">{{ c }}</option>
+        <!-- UI: muestra "II ciclo" pero API recibe solo "II" -->
+        <option *ngFor="let c of ciclos" [value]="c">{{ c }} ciclo</option>
       </select>
 
-      <button class="btn" (click)="cargar()" [disabled]="loading">
+      <button
+        class="btn"
+        (click)="onCambioSemestre()"
+        [disabled]="loading || exportando"
+      >
         Actualizar
       </button>
 
       <button
         class="btn"
         (click)="exportarExcel()"
-        [disabled]="loading || !estudiantes.length"
+        [disabled]="loading || exportando"
       >
-        Exportar Excel
+        <span *ngIf="!exportando">Exportar Excel</span>
+        <span *ngIf="exportando">Generando...</span>
       </button>
 
       <button
         class="btn btn-secondary"
         (click)="cerrarSesion()"
-        [disabled]="loading"
+        [disabled]="loading || exportando"
       >
         Cerrar sesión
       </button>
@@ -32,33 +38,39 @@
 
     <div class="status" *ngIf="loading">Cargando...</div>
     <div class="status error" *ngIf="error">{{ error }}</div>
+    <div class="status error" *ngIf="!loading && errorExport">
+      {{ errorExport }}
+    </div>
 
     <div class="students" *ngIf="!loading && estudiantes.length">
       <div class="pagination" *ngIf="totalPaginas > 1">
         <button
           class="btn"
           (click)="cambiarPagina(-1)"
-          [disabled]="paginaActual <= 1"
+          [disabled]="paginaActual <= 1 || loading || exportando"
         >
           <
         </button>
+
         <span class="page-info"
           >Página {{ paginaActual }} de {{ totalPaginas }}</span
         >
+
         <button
           class="btn"
           (click)="cambiarPagina(1)"
-          [disabled]="paginaActual >= totalPaginas"
+          [disabled]="paginaActual >= totalPaginas || loading || exportando"
         >
           >
         </button>
       </div>
 
-      <div class="student" *ngFor="let est of estudiantesPaginados">
+      <!-- Cada carga devuelve UN estudiante (limit=1) -->
+      <div class="student" *ngFor="let est of estudiantes">
         <h2 class="student-title">{{ est.nombres }}</h2>
 
         <section class="report">
-          <h3>Reporte 1 (Preguntas 1 y 2)</h3>
+          <h3>Reporte 1 (Secciones 1 y 2)</h3>
           <div class="table-wrap">
             <table>
               <thead>
@@ -78,7 +90,7 @@
         </section>
 
         <section class="report">
-          <h3>Reporte 2 (Preguntas 3, 4 y 5)</h3>
+          <h3>Reporte 2 (Secciones 3, 4 y 5)</h3>
           <div class="table-wrap">
             <table>
               <thead>
@@ -98,7 +110,7 @@
         </section>
 
         <section class="report final">
-          <h3>Reporte final (Preguntas 1..5)</h3>
+          <h3>Reporte final (Secciones 1..5)</h3>
           <div class="table-wrap">
             <table>
               <thead>

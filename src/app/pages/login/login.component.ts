@@ -49,7 +49,13 @@ export class LoginComponent {
             JSON.stringify(r.usuario),
           );
 
-          this.router.navigate(['/cuestionario']);
+          // Admin debe ir a reportes; estudiantes a cuestionario
+          const codigo = String(r?.usuario?.codigo || r?.usuario?.id || '');
+          if (codigo === '2026002') {
+            this.router.navigate(['/reportes']);
+          } else {
+            this.router.navigate(['/cuestionario']);
+          }
         },
 
         error: () => {

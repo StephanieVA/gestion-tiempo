@@ -16,11 +16,16 @@ import { FormsModule } from '@angular/forms';
 export class ReportesComponent {
   private http = inject(HttpClient);
 
-  ciclos = ['II ciclo', 'I ciclo', 'III ciclo', 'IV ciclo'];
+  // UI muestra: II ciclo, I ciclo, etc.
+  // Backend recibe: I, II, III, ... (tal cual respuestas.semestre)
+  ciclos = ['II', 'I', 'III', 'IV'];
   cicloSeleccionado = '';
 
   loading = false;
   error: string | null = null;
+
+  exportando = false;
+  errorExport: string | null = null;
 
   dias = [
     'Lunes',
@@ -43,21 +48,12 @@ export class ReportesComponent {
   // Permisos
   tieneAccesoReportes = false;
 
-  // Paginación
+  // Paginación remota
   paginaActual = 1;
-  tamPagina = 5;
-
-  get estudiantesPaginados() {
-    const start = (this.paginaActual - 1) * this.tamPagina;
-    return this.estudiantes.slice(start, start + this.tamPagina);
-  }
-
-  get totalPaginas() {
-    return Math.max(1, Math.ceil(this.estudiantes.length / this.tamPagina));
-  }
+  totalPaginas = 1;
+  readonly limit = 1;
 
   ngOnInit() {
-    // En SSR build localStorage no existe: usar global/window solo en browser.
     const usuario = this.getUsuarioLocal();
 
     this.tieneAccesoReportes =
@@ -83,23 +79,43 @@ export class ReportesComponent {
     }
   }
 
+  private getTokenLocal(): string | null {
+    try {
+      if (typeof window === 'undefined') return null;
+      return localStorage.getItem('token');
+    } catch {
+      return null;
+    }
+  }
+
   cargar() {
     this.loading = true;
     this.error = null;
 
     const params: string[] = [];
     if (this.cicloSeleccionado) {
+      // backend recibe I/II/III... (sin "ciclo")
       params.push(`ciclo=${encodeURIComponent(this.cicloSeleccionado)}`);
     }
 
-    const qs = params.length ? `?${params.join('&')}` : '';
+    params.push(`page=${this.paginaActual}`);
+    params.push(`limit=${this.limit}`);
+
+    const qs = `?${params.join('&')}`;
+
+    const token = this.getTokenLocal();
 
     this.http
-      .get<any>(`http://localhost:3000/api/reportes/por-ciclo${qs}`)
+      .get<any>(`http://localhost:3000/api/reportes/por-ciclo${qs}`, {
+        headers: token
+          ? ({ Authorization: `Bearer ${token}` } as any)
+          : undefined,
+      })
       .subscribe({
         next: (r) => {
-          this.estudiantes = r.estudiantes || [];
-          this.paginaActual = 1;
+          this.estudiantes = r?.estudiantes || [];
+          this.totalPaginas =
+            typeof r?.totalPaginas === 'number' ? r.totalPaginas : 1;
           this.loading = false;
         },
         error: (e) => {
@@ -109,50 +125,61 @@ export class ReportesComponent {
       });
   }
 
-  cambiarPagina(delta: number) {
-    const next = this.paginaActual + delta;
-    if (next < 1 || next > this.totalPaginas) return;
-    this.paginaActual = next;
+  // Cuando cambie el semestre => vuelve a página 1
+  onCambioSemestre() {
+    this.paginaActual = 1;
+    this.cargar();
   }
 
-  // Exporta a CSV (compatible con Excel) para evitar dependencias XLSX.
+  // Anterior / Siguiente deben consultar nuevamente la API
+  cambiarPagina(delta: number) {
+    const nueva = this.paginaActual + delta;
+    if (nueva < 1 || nueva > this.totalPaginas) return;
+
+    this.paginaActual = nueva;
+    this.cargar();
+  }
+
   exportarExcel() {
-    if (!this.estudiantes.length) return;
+    this.exportando = true;
+    this.errorExport = null;
 
-    const rows: string[] = [];
-    const header = [
-      'Estudiante',
-      'Día',
-      'Reporte1 (1+2)',
-      'Reporte2 (3+4+5)',
-      'ReporteFinal (1..5)',
-    ];
-    rows.push(header.join(','));
-
-    for (const est of this.estudiantes) {
-      for (const d of this.dias) {
-        const r1 = est.reporte1[d] || 0;
-        const r2 = est.reporte2[d] || 0;
-        const rf = est.reporteFinal[d] || 0;
-
-        // escapar comillas
-        const estNombre = String(est.nombres).replace(/"/g, '""');
-        const safeDia = String(d).replace(/"/g, '""');
-        rows.push([`"${estNombre}"`, `"${safeDia}"`, r1, r2, rf].join(','));
-      }
+    const params: string[] = [];
+    if (this.cicloSeleccionado) {
+      params.push(`ciclo=${encodeURIComponent(this.cicloSeleccionado)}`);
     }
 
-    const csv = rows.join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = window.URL.createObjectURL(blob);
+    const qs = params.length ? `?${params.join('&')}` : '';
 
-    const a = document.createElement('a');
-    const ciclo = this.cicloSeleccionado ? this.cicloSeleccionado : 'Todos';
-    a.href = url;
-    a.download = `reportes_${ciclo.replace(/\s+/g, '_')}.csv`;
-    a.click();
+    const token = this.getTokenLocal();
 
-    window.URL.revokeObjectURL(url);
+    this.http
+      .get(`http://localhost:3000/api/reportes/exportar-excel${qs}`, {
+        headers: token
+          ? ({ Authorization: `Bearer ${token}` } as any)
+          : undefined,
+        responseType: 'blob',
+      })
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+
+          const ciclo = this.cicloSeleccionado
+            ? this.cicloSeleccionado
+            : 'todos';
+          a.href = url;
+          a.download = `reportes_${ciclo}.xlsx`;
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+          this.exportando = false;
+        },
+        error: (e) => {
+          this.errorExport = e?.message || 'Error al exportar Excel';
+          this.exportando = false;
+        },
+      });
   }
 
   cerrarSesion() {
@@ -161,7 +188,6 @@ export class ReportesComponent {
       localStorage.removeItem('usuario');
     } catch {}
 
-    // SPA: recargar para volver a login (simple)
     window.location.href = '/';
   }
 }

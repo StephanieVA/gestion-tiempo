@@ -16,7 +16,7 @@
     <div class="campo">
       <label> Apellidos y nombres </label>
 
-      <input [ngModel]="persona.nombre" readonly />
+      <input [(ngModel)]="persona.nombre" placeholder="Apellidos y nombres" />
     </div>
 
     <div class="campo">
@@ -40,12 +40,22 @@
     <div class="campo">
       <label> Semestre </label>
 
-      <select [(ngModel)]="persona.semestre">
+      <select
+        [(ngModel)]="persona.semestre"
+        (ngModelChange)="onSemestreChange()"
+      >
         <option value="">Seleccionar</option>
-        <option value="I ciclo">I ciclo</option>
-        <option value="II ciclo">II ciclo</option>
-        <option value="III ciclo">III ciclo</option>
-        <option value="IV ciclo">IV ciclo</option>
+        <option value="I">I ciclo</option>
+        <option value="II">II ciclo</option>
+
+        <option value="III">III ciclo</option>
+        <option value="IV">IV ciclo</option>
+        <option value="V">V ciclo</option>
+        <option value="VI">VI ciclo</option>
+        <option value="VII">VII ciclo</option>
+        <option value="VIII">VIII ciclo</option>
+        <option value="IX">IX ciclo</option>
+        <option value="X">X ciclo</option>
       </select>
     </div>
   </div>
