@@ -216,70 +216,40 @@ export class ReportesComponent {
 
   verDetalle(estudiante:any){
 
-
-    this.estudianteSeleccionado=estudiante;
-
-
-    const token=this.getTokenLocal();
+this.estudianteSeleccionado = estudiante;
 
 
+this.http.get<any[]>(
+'https://backend-gestion-production-b3b7.up.railway.app/api/reportes/detalle-estudiante',
+{
+params:{
+nombre: estudiante.nombres,
+semestre: estudiante.semestre
+}
+}
+)
+.subscribe({
 
-    this.http.get<any[]>(
+next:(data)=>{
 
-      `${this.api}/detalle-estudiante`,
+console.log("DETALLE:",data);
 
-      {
+this.detalle=data;
 
+this.modalVisible=true;
 
-        params:{
+},
 
+error:(error)=>{
 
-          nombre:estudiante.nombres,
+console.log(error);
 
-          semestre:estudiante.semestre
+}
 
-
-        },
-
-
-        headers:token
-        ?
-        {
-          Authorization:`Bearer ${token}`
-        }
-        :
-        undefined
-
-
-      }
-
-
-    )
-    .subscribe({
-
-      next:(data)=>{
+});
 
 
-        this.detalle=data;
-
-
-        this.modalVisible=true;
-
-
-      },
-
-
-      error:(e)=>{
-
-        console.log(e);
-
-      }
-
-
-    });
-
-
-  }
+}
 
 
 
