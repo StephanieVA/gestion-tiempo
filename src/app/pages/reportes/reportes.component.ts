@@ -37,13 +37,19 @@ export class ReportesComponent {
     'Domingo',
   ];
 
-  estudiantes: Array<{
-    estudiante_id: number;
-    nombres: string;
-    reporte1: Record<string, number>;
-    reporte2: Record<string, number>;
-    reporteFinal: Record<string, number>;
-  }> = [];
+  //estudiantes: Array<{
+  //  estudiante_id: number;
+  //  nombres: string;
+  //   reporte1: Record<string, number>;
+  //  reporte2: Record<string, number>;
+  //    reporteFinal: Record<string, number>;
+  //}> = [];
+  estudiantes: any[] = [];
+  modalVisible = false;
+
+  detalle: any[] = [];
+
+  estudianteSeleccionado: any = null;
 
   // Permisos
   tieneAccesoReportes = false;
@@ -67,7 +73,40 @@ export class ReportesComponent {
 
     this.cargar();
   }
+  verDetalle(estudiante: any) {
+    this.estudianteSeleccionado = estudiante;
 
+    const token = this.getTokenLocal();
+
+    this.http
+      .get<any[]>(
+        `https://backend-gestion-production-b3b7.up.railway.app/detalle-estudiante`,
+
+        {
+          params: {
+            nombre: estudiante.nombres,
+            semestre: estudiante.semestre,
+          },
+
+          headers: token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : undefined,
+        },
+      )
+      .subscribe({
+        next: (data) => {
+          this.detalle = data;
+
+          this.modalVisible = true;
+        },
+
+        error: (e) => {
+          console.log(e);
+        },
+      });
+  }
   private getUsuarioLocal(): any {
     try {
       if (typeof window === 'undefined') return null;
@@ -106,11 +145,14 @@ export class ReportesComponent {
     const token = this.getTokenLocal();
 
     this.http
-      .get<any>(`https://backend-gestion-production-b3b7.up.railway.app/api/reportes/por-ciclo${qs}`, {
-        headers: token
-          ? ({ Authorization: `Bearer ${token}` } as any)
-          : undefined,
-      })
+      .get<any>(
+        `https://backend-gestion-production-b3b7.up.railway.app/${qs}`,
+        {
+          headers: token
+            ? ({ Authorization: `Bearer ${token}` } as any)
+            : undefined,
+        },
+      )
       .subscribe({
         next: (r) => {
           this.estudiantes = r?.estudiantes || [];
@@ -154,7 +196,7 @@ export class ReportesComponent {
     const token = this.getTokenLocal();
 
     this.http
-      .get(`https://backend-gestion-production-b3b7.up.railway.app/api/reportes/exportar-excel${qs}`, {
+      .get(`backend-gestion-production-b3b7.up.railway.app${qs}`, {
         headers: token
           ? ({ Authorization: `Bearer ${token}` } as any)
           : undefined,
