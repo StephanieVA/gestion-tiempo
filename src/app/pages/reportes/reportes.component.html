@@ -69,65 +69,35 @@
       <div class="student" *ngFor="let est of estudiantes">
         <h2 class="student-title">{{ est.nombres }}</h2>
 
-        <section class="report">
-          <h3>Reporte 1 (Secciones 1 y 2)</h3>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Día</th>
-                  <th>Total horas</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let d of dias">
-                  <td>{{ d }}</td>
-                  <td>{{ est.reporte1[d] || 0 }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+        <table>
+          <thead>
+            <tr>
+              <th>Estudiante</th>
 
-        <section class="report">
-          <h3>Reporte 2 (Secciones 3, 4 y 5)</h3>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Día</th>
-                  <th>Total horas</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let d of dias">
-                  <td>{{ d }}</td>
-                  <td>{{ est.reporte2[d] || 0 }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+              <th>Semestre</th>
 
-        <section class="report final">
-          <h3>Reporte final (Secciones 1..5)</h3>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Día</th>
-                  <th>Total horas</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let d of dias">
-                  <td>{{ d }}</td>
-                  <td>{{ est.reporteFinal[d] || 0 }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+              <th>Acción</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let est of estudiantes">
+              <td>
+                {{ est.nombres }}
+              </td>
+
+              <td>
+                {{ est.semestre }}
+              </td>
+
+              <td>
+                <button class="btn" (click)="verDetalle(est)">
+                  Ver detalle
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         <div class="divider"></div>
       </div>
@@ -136,5 +106,47 @@
     <div *ngIf="!loading && !estudiantes.length" class="empty">
       No hay respuestas para mostrar.
     </div>
+  </div>
+</div>
+<div class="modal" *ngIf="modalVisible">
+  <div class="modal-content">
+    <button class="cerrar" (click)="modalVisible = false">X</button>
+
+    <h2>
+      {{ estudianteSeleccionado.nombres }}
+    </h2>
+
+    <h3>
+      Semestre:
+      {{ estudianteSeleccionado.semestre }}
+    </h3>
+
+    <table>
+      <tr>
+        <th>Pregunta</th>
+
+        <th>Actividad</th>
+
+        <th>Día</th>
+
+        <th>Horas</th>
+      </tr>
+
+      <tr *ngFor="let d of detalle">
+        <td>Pregunta {{ d.seccion }}</td>
+
+        <td>
+          {{ d.actividad }}
+        </td>
+
+        <td>
+          {{ d.dia }}
+        </td>
+
+        <td>
+          {{ d.horas }}
+        </td>
+      </tr>
+    </table>
   </div>
 </div>
