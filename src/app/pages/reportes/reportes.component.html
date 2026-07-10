@@ -1,152 +1,351 @@
 <div class="page">
   <div class="container">
+
     <h1>Reportes - Gestión del Tiempo</h1>
 
+
+    <!-- FILTROS -->
     <div class="filters">
+
       <label>Ciclo/semestre:</label>
-      <select [(ngModel)]="cicloSeleccionado" (change)="onCambioSemestre()">
-        <option value="">Todos</option>
-        <!-- UI: muestra "II ciclo" pero API recibe solo "II" -->
-        <option *ngFor="let c of ciclos" [value]="c">{{ c }} ciclo</option>
+
+      <select 
+        [(ngModel)]="cicloSeleccionado"
+        (change)="onCambioSemestre()">
+
+        <option value="">
+          Todos
+        </option>
+
+        <option 
+          *ngFor="let c of ciclos"
+          [value]="c">
+
+          {{c}} ciclo
+
+        </option>
+
       </select>
+
 
       <button
         class="btn"
         (click)="onCambioSemestre()"
-        [disabled]="loading || exportando"
-      >
+        [disabled]="loading || exportando">
+
         Actualizar
+
       </button>
+
+
 
       <button
         class="btn"
         (click)="exportarExcel()"
-        [disabled]="loading || exportando"
-      >
-        <span *ngIf="!exportando">Exportar Excel</span>
-        <span *ngIf="exportando">Generando...</span>
+        [disabled]="loading || exportando">
+
+        <span *ngIf="!exportando">
+          Exportar Excel
+        </span>
+
+        <span *ngIf="exportando">
+          Generando...
+        </span>
+
       </button>
+
+
 
       <button
         class="btn btn-secondary"
-        (click)="cerrarSesion()"
-        [disabled]="loading || exportando"
-      >
+        (click)="cerrarSesion()">
+
         Cerrar sesión
+
       </button>
+
     </div>
 
-    <div class="status" *ngIf="loading">Cargando...</div>
-    <div class="status error" *ngIf="error">{{ error }}</div>
-    <div class="status error" *ngIf="!loading && errorExport">
-      {{ errorExport }}
+
+
+    <!-- ESTADOS -->
+
+    <div class="status" *ngIf="loading">
+      Cargando...
     </div>
 
-    <div class="students" *ngIf="!loading && estudiantes.length">
-      <div class="pagination" *ngIf="totalPaginas > 1">
-        <button
-          class="btn"
-          (click)="cambiarPagina(-1)"
-          [disabled]="paginaActual <= 1 || loading || exportando"
-        >
-          <
-        </button>
 
-        <span class="page-info"
-          >Página {{ paginaActual }} de {{ totalPaginas }}</span
-        >
-
-        <button
-          class="btn"
-          (click)="cambiarPagina(1)"
-          [disabled]="paginaActual >= totalPaginas || loading || exportando"
-        >
-          >
-        </button>
-      </div>
-
-      <!-- Cada carga devuelve UN estudiante (limit=1) -->
-      <div class="student" *ngFor="let est of estudiantes">
-        <h2 class="student-title">{{ est.nombres }}</h2>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Estudiante</th>
-
-              <th>Semestre</th>
-
-              <th>Acción</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr *ngFor="let est of estudiantes">
-              <td>
-                {{ est.nombres }}
-              </td>
-
-              <td>
-                {{ est.semestre }}
-              </td>
-
-              <td>
-                <button class="btn" (click)="verDetalle(est)">
-                  Ver detalle
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="divider"></div>
-      </div>
+    <div class="status error" *ngIf="error">
+      {{error}}
     </div>
 
-    <div *ngIf="!loading && !estudiantes.length" class="empty">
+
+
+    <!-- PAGINACION -->
+
+    <div 
+      class="pagination"
+      *ngIf="totalPaginas > 1">
+
+
+      <button
+        class="btn"
+        (click)="cambiarPagina(-1)"
+        [disabled]="paginaActual<=1">
+
+        Anterior
+
+      </button>
+
+
+
+      <span>
+
+        Página {{paginaActual}} de {{totalPaginas}}
+
+      </span>
+
+
+
+      <button
+        class="btn"
+        (click)="cambiarPagina(1)"
+        [disabled]="paginaActual>=totalPaginas">
+
+        Siguiente
+
+      </button>
+
+
+    </div>
+
+
+
+
+    <!-- LISTADO ESTUDIANTES -->
+
+
+    <div 
+      class="students"
+      *ngIf="!loading && estudiantes.length">
+
+
+      <table>
+
+
+        <thead>
+
+          <tr>
+
+            <th>
+              N°
+            </th>
+
+
+            <th>
+              Estudiante
+            </th>
+
+
+            <th>
+              Semestre
+            </th>
+
+
+            <th>
+              Acción
+            </th>
+
+
+          </tr>
+
+        </thead>
+
+
+
+        <tbody>
+
+
+          <tr 
+            *ngFor="let est of estudiantes; let i=index">
+
+
+            <td>
+              {{i+1}}
+            </td>
+
+
+            <td>
+              {{est.nombres}}
+            </td>
+
+
+            <td>
+              {{est.semestre}}
+            </td>
+
+
+
+            <td>
+
+              <button
+                class="btn"
+                (click)="verDetalle(est)">
+
+                Ver detalle
+
+              </button>
+
+
+            </td>
+
+
+          </tr>
+
+
+
+        </tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+
+
+
+    <div 
+      *ngIf="!loading && !estudiantes.length"
+      class="empty">
+
       No hay respuestas para mostrar.
+
     </div>
+
+
   </div>
+
 </div>
-<div class="modal" *ngIf="modalVisible">
-  <div class="modal-content">
-    <button class="cerrar" (click)="modalVisible = false">X</button>
+
+
+
+
+
+<!-- ========================= -->
+<!-- MODAL DETALLE ESTUDIANTE -->
+<!-- ========================= -->
+
+
+<div 
+ class="modal"
+ *ngIf="modalVisible && estudianteSeleccionado">
+
+
+ <div class="modal-content">
+
+
+
+    <button
+      class="cerrar"
+      (click)="modalVisible=false">
+
+      X
+
+    </button>
+
+
 
     <h2>
-      {{ estudianteSeleccionado.nombres }}
+
+      {{estudianteSeleccionado.nombres}}
+
     </h2>
 
+
+
     <h3>
+
       Semestre:
-      {{ estudianteSeleccionado.semestre }}
+      {{estudianteSeleccionado.semestre}}
+
     </h3>
 
+
+
+
     <table>
-      <tr>
-        <th>Pregunta</th>
 
-        <th>Actividad</th>
 
-        <th>Día</th>
+      <thead>
 
-        <th>Horas</th>
-      </tr>
+        <tr>
 
-      <tr *ngFor="let d of detalle">
-        <td>Pregunta {{ d.seccion }}</td>
+          <th>
+            Pregunta
+          </th>
 
-        <td>
-          {{ d.actividad }}
-        </td>
 
-        <td>
-          {{ d.dia }}
-        </td>
+          <th>
+            Actividad
+          </th>
 
-        <td>
-          {{ d.horas }}
-        </td>
-      </tr>
+
+          <th>
+            Día
+          </th>
+
+
+          <th>
+            Horas
+          </th>
+
+
+        </tr>
+
+      </thead>
+
+
+
+      <tbody>
+
+
+        <tr
+          *ngFor="let d of detalle">
+
+
+          <td>
+            Pregunta {{d.seccion}}
+          </td>
+
+
+          <td>
+            {{d.actividad}}
+          </td>
+
+
+          <td>
+            {{d.dia}}
+          </td>
+
+
+          <td>
+            {{d.horas}}
+          </td>
+
+
+        </tr>
+
+
+      </tbody>
+
+
+
     </table>
-  </div>
+
+
+ </div>
+
+
 </div>
