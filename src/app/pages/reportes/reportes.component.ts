@@ -17,7 +17,7 @@ export class ReportesComponent {
 
   // URL base del backend
   api =
-    'https://backend-gestion-production-b3b8.up.railway.app/api/reportes';
+    'https://backend-gestion-production-b3b7.up.railway.app/api/reportes';
 
 
   ciclos = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
