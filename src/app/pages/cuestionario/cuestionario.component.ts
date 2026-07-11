@@ -214,7 +214,17 @@ export class CuestionarioComponent {
       }
     });
   }
+validarHora(objeto: any, dia: string) {
 
+  let valor = Number(objeto[dia]);
+
+  if (valor < 1 || valor > 9 || !Number.isInteger(valor)) {
+
+    alert('Solo se puede ingresar valores enteros del 1 al 9');
+
+    objeto[dia] = 0;
+  }
+}
   agregarActividad(pregunta: 1 | 2 | 3 | 4 | 5) {
     const nueva = {
       nombre: '',
