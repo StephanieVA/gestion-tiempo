@@ -249,6 +249,20 @@ validarHora(objeto: any, dia: string) {
   }
 
   guardar() {
+     if (
+    !this.persona.nombre ||
+    !this.persona.edad ||
+    !this.persona.sexo ||
+    !this.persona.semestre
+  ) {
+
+    alert('Complete todos los datos personales antes de enviar el cuestionario');
+
+    return;
+  }
+
+
+  let respuestas: any[] = [];
     let respuestas: any[] = [];
 
     const agregar = (
@@ -315,14 +329,30 @@ validarHora(objeto: any, dia: string) {
 
       return;
     }
+// Validar horas antes de guardar
 
+const valoresInvalidos = respuestas.some(
+  r => r.horas < 1 || r.horas > 9 || !Number.isInteger(r.horas)
+);
+
+
+if(valoresInvalidos){
+
+  alert('Existen valores incorrectos. Solo se permiten horas del 1 al 9');
+
+  return;
+}
     this.api
       .guardar(respuestas)
 
       .subscribe({
         next: () => {
-          alert('Cuestionario guardado');
-        },
+
+  alert('Cuestionario enviado correctamente');
+
+  this.limpiarFormulario();
+
+},
 
         error: (e: any) => {
           console.log(e);
@@ -331,4 +361,27 @@ validarHora(objeto: any, dia: string) {
         },
       });
   }
+  limpiarFormulario(){
+
+  this.persona = {
+    id:0,
+    nombre:'',
+    edad:'',
+    sexo:'',
+    semestre:''
+  };
+
+
+  this.extras = {
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: []
+  };
+
+
+  this.inicializar();
+
+}
 }
