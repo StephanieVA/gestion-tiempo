@@ -290,6 +290,37 @@
   <button class="btn-agregar" (click)="agregarActividad(5)">
     + Agregar actividad
   </button>
+<div class="resumen-horas">
+
+  <h3>Total de horas registradas por día</h3>
+
+  <table border="1">
+
+    <tr>
+      <th>Día</th>
+      <th>Total de horas</th>
+    </tr>
+
+    <tr *ngFor="let d of dias">
+      <td>{{ d }}</td>
+
+      <td>
+        {{ obtenerTotalDia(d) }} horas
+      </td>
+
+    </tr>
+
+  </table>
+
+</div>
+
+
+<div class="guardar">
+  <button (click)="guardar()">
+    Guardar Cuestionario
+  </button>
+</div>
+  
   <div class="guardar">
     <button (click)="guardar()">Guardar Cuestionario</button>
   </div>
