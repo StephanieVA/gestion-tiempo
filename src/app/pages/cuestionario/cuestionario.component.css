@@ -664,3 +664,25 @@ margin-bottom:20px;
 background:#1e293b;
 
 }
+.exceso {
+  background-color: #ffcccc;
+  color: #b30000;
+  font-weight: bold;
+}
+
+
+.resumen-horas {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+
+.resumen-horas table {
+  width: 100%;
+  text-align: center;
+}
+
+
+.resumen-horas span {
+  font-size: 14px;
+}
