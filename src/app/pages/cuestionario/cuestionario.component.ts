@@ -263,7 +263,6 @@ validarHora(objeto: any, dia: string) {
 
 
   let respuestas: any[] = [];
-    let respuestas: any[] = [];
 
     const agregar = (
       lista: string[],
