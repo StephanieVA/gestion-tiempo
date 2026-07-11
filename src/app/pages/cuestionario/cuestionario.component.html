@@ -299,14 +299,38 @@
     <tr>
       <th>Día</th>
       <th>Total de horas</th>
+      <th>Estado</th>
     </tr>
 
-    <tr *ngFor="let d of dias">
-      <td>{{ d }}</td>
+
+    <tr 
+      *ngFor="let d of dias"
+      [class.exceso]="obtenerTotalDia(d) > 24"
+    >
+
+      <td>
+        {{ d }}
+      </td>
+
 
       <td>
         {{ obtenerTotalDia(d) }} horas
       </td>
+
+
+      <td>
+
+        <span *ngIf="obtenerTotalDia(d) > 24">
+          ⚠️ Excedió las 24 horas. Reduzca horas.
+        </span>
+
+
+        <span *ngIf="obtenerTotalDia(d) <= 24">
+          ✔ Correcto
+        </span>
+
+      </td>
+
 
     </tr>
 
@@ -314,12 +338,6 @@
 
 </div>
 
-
-<div class="guardar">
-  <button (click)="guardar()">
-    Guardar Cuestionario
-  </button>
-</div>
   
   <div class="guardar">
     <button (click)="guardar()">Guardar Cuestionario</button>
