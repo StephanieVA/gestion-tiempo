@@ -383,4 +383,39 @@ if(valoresInvalidos){
   this.inicializar();
 
 }
+  obtenerTotalDia(dia: string): number {
+
+  let total = 0;
+
+
+  // Suma preguntas 1, 2, 3 y 4
+  const actividades = [
+    ...this.seccion1,
+    ...this.seccion2,
+    ...this.seccion3,
+    ...this.seccion4
+  ];
+
+
+  actividades.forEach((a: string) => {
+
+    total += Number(this.datos[a]?.[dia]) || 0;
+
+  });
+
+
+  // Suma actividades agregadas manualmente
+  Object.keys(this.extras).forEach((q) => {
+
+    this.extras[Number(q)].forEach((o) => {
+
+      total += Number(o.horas[dia]) || 0;
+
+    });
+
+  });
+
+
+  return total;
+}
 }
