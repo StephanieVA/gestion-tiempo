@@ -218,9 +218,9 @@ validarHora(objeto: any, dia: string) {
 
   let valor = Number(objeto[dia]);
 
-  if (valor < 1 || valor > 9 || !Number.isInteger(valor)) {
+  if (valor < 0 || valor > 9 || !Number.isInteger(valor)) {
 
-    alert('Solo se puede ingresar valores enteros del 1 al 9');
+    alert('Solo se puede ingresar valores enteros del 0 al 9');
 
     objeto[dia] = 0;
   }
