@@ -100,7 +100,7 @@
 
       <td *ngFor="let d of dias">
       <!--  <input type="number" [(ngModel)]="datos[a][d]" min="0" /> -->
-        <input type="number" [(ngModel)]="datos[a][d]" min="0" max="9" step="1" (input)="validarHora(o.horas, d)" />
+        <input type="number" [(ngModel)]="datos[a][d]" min="0" max="9" step="1" (input)="validarHora(datos[a], d)" />
       </td>
     </tr>
 
@@ -148,7 +148,7 @@
 
       <td *ngFor="let d of dias">
         <!--  <input type="number" [(ngModel)]="datos[a][d]" min="0" /> -->
-        <input type="number" [(ngModel)]="datos[a][d]" min="0" max="9" step="1" (input)="validarHora(o.horas, d)" />
+        <input type="number" [(ngModel)]="datos[a][d]" min="0" max="9" step="1" (input)="validarHora(datos[a], d)" />
       </td>
     </tr>
 
@@ -195,7 +195,7 @@
 
       <td *ngFor="let d of dias">
        <!--  <input type="number" [(ngModel)]="datos[a][d]" min="0" /> -->
-        <input type="number" [(ngModel)]="datos[a][d]" min="0" max="9" step="1" (input)="validarHora(o.horas, d)" />
+        <input type="number" [(ngModel)]="datos[a][d]" min="0" max="9" step="1" (input)="validarHora(datos[a], d)" />
       </td>
     </tr>
 
@@ -237,7 +237,7 @@
 
       <td *ngFor="let d of dias">
     <!--  <input type="number" [(ngModel)]="datos[a][d]" min="0" /> -->
-        <input type="number" [(ngModel)]="datos[a][d]" min="0" max="9" step="1" (input)="validarHora(o.horas, d)" />
+        <input type="number" [(ngModel)]="datos[a][d]" min="0" max="9" step="1" (input)="validarHora(datos[a], d)" />
       </td>
     </tr>
 
