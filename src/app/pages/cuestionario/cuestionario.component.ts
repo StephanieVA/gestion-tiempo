@@ -249,6 +249,38 @@ validarHora(objeto: any, dia: string) {
   }
 
   guardar() {
+    
+  if (
+    !this.persona.nombre ||
+    !this.persona.edad ||
+    !this.persona.sexo ||
+    !this.persona.semestre
+  ) {
+
+    alert(
+      'Complete todos los datos personales antes de enviar el cuestionario'
+    );
+
+    return;
+  }
+
+
+
+  // Validar máximo 24 horas por día
+
+  const diaExcedido = this.dias.find(
+    d => this.obtenerTotalDia(d) > 24
+  );
+
+
+  if (diaExcedido) {
+
+    alert(
+      `El día ${diaExcedido} supera las 24 horas permitidas. Reduzca las horas antes de enviar.`
+    );
+
+    return;
+  }
      if (
     !this.persona.nombre ||
     !this.persona.edad ||
