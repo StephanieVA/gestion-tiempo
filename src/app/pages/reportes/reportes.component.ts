@@ -208,8 +208,22 @@ editar(est:any){
   console.log("Editar estudiante:", est);
 }
   validar(est:any){
-
-  console.log("Validando estudiante:", est);
-
+this.http.put<any>(
+`${this.api}/validar-estudiante`,
+{
+nombre: est.nombres,
+semestre: est.semestre
+}
+)
+.subscribe({
+next:(resp)=>{
+console.log(resp);
+// volver a cargar datos
+this.cargar();
+},
+error:(err)=>{
+console.log(err);
+}
+});
 }
 }
