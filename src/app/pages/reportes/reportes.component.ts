@@ -204,5 +204,8 @@ alert("Error al eliminar");
 }
 });
 }
-
+editar(est:any){
+  console.log("Editar estudiante:", est);
+}
+  
 }
