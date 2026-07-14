@@ -206,9 +206,18 @@ alert("Error al eliminar");
 }
 });
 }
+
+modalEditar=false;
+estudianteEditar:any=null;
 editar(est:any){
-  console.log("Editar estudiante:", est);
+this.estudianteEditar={
+  encuesta_id:est.encuesta_id,
+  nombres:est.nombres,
+  dni:est.dni
+};
+this.modalEditar=true;
 }
+  
   validar(est:any){
 this.http.put<any>(
 `${this.api}/validar-estudiante`,
