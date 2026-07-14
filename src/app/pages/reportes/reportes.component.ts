@@ -207,5 +207,9 @@ alert("Error al eliminar");
 editar(est:any){
   console.log("Editar estudiante:", est);
 }
-  
+  validar(est:any){
+
+  console.log("Validando estudiante:", est);
+
+}
 }
