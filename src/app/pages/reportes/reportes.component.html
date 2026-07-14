@@ -1,44 +1,27 @@
 <div class="page">
   <div class="container">
-
     <h1>Reportes - Gestión del Tiempo</h1>
-
-
     <!-- FILTROS -->
     <div class="filters">
-
       <label>Ciclo/semestre:</label>
-
       <select 
         [(ngModel)]="cicloSeleccionado"
         (change)="onCambioSemestre()">
-
         <option value="">
           Todos
         </option>
-
         <option 
           *ngFor="let c of ciclos"
           [value]="c">
-
           {{c}} ciclo
-
         </option>
-
       </select>
-
-
       <button
         class="btn"
         (click)="onCambioSemestre()"
         [disabled]="loading || exportando">
-
         Actualizar
-
       </button>
-
-
-
       <button
         class="btn"
         (click)="exportarExcel()"
@@ -47,192 +30,102 @@
         <span *ngIf="!exportando">
           Exportar Excel
         </span>
-
         <span *ngIf="exportando">
           Generando...
         </span>
 
       </button>
-
-
-
       <button
         class="btn btn-secondary"
         (click)="cerrarSesion()">
-
         Cerrar sesión
-
       </button>
-
     </div>
 
-
-
     <!-- ESTADOS -->
-
     <div class="status" *ngIf="loading">
       Cargando...
     </div>
-
 
     <div class="status error" *ngIf="error">
       {{error}}
     </div>
 
-
-
     <!-- PAGINACION -->
-
     <div 
       class="pagination"
       *ngIf="totalPaginas > 1">
-
-
       <button
         class="btn"
         (click)="cambiarPagina(-1)"
         [disabled]="paginaActual<=1">
-
         Anterior
-
       </button>
-
-
-
       <span>
-
         Página {{paginaActual}} de {{totalPaginas}}
-
       </span>
-
-
-
       <button
         class="btn"
         (click)="cambiarPagina(1)"
         [disabled]="paginaActual>=totalPaginas">
-
         Siguiente
-
       </button>
-
-
     </div>
-
-
-
-
     <!-- LISTADO ESTUDIANTES -->
-
-
     <div 
       class="students"
       *ngIf="!loading && estudiantes.length">
-
-
       <table>
-
-
         <thead>
-
           <tr>
-
-            <th>
-              N°
-            </th>
-
-
-            <th>
-              Estudiante
-            </th>
-
-
-            <th>
-              Semestre
-            </th>
-
-
-            <th>
-              Acción
-            </th>
-
-
+            <th> N° </th>
+            <th> Estudiante </th>
+            <th> Semestre </th>
+            <th> Acción </th>
           </tr>
-
         </thead>
-
-
-
         <tbody>
-
-
           <tr 
             *ngFor="let est of estudiantes; let i=index">
-
-
+            <td> {{i+1}} </td>
+            <td> {{est.nombres}}</td>
+            <td> {{est.semestre}} </td>
             <td>
-              {{i+1}}
-            </td>
-
-
-            <td>
-              {{est.nombres}}
-            </td>
-
-
-            <td>
-              {{est.semestre}}
-            </td>
-
-
-
-            <td>
-
               <button
-                class="btn"
-                (click)="verDetalle(est)">
-
-                Ver detalle
-
-              </button>
-
-
+class="btn"
+(click)="verDetalle(est)">
+Ver detalle
+</button>
+<button
+class="btn btn-success"
+(click)="validar(est)"
+*ngIf="est.estado==='PENDIENTE'">
+Validar
+</button>
+<button
+class="btn btn-warning"
+(click)="editar(est)"
+*ngIf="est.estado==='VALIDADO'">
+Editar
+</button>
+<button
+class="btn btn-danger"
+(click)="eliminar(est)"
+*ngIf="est.estado==='VALIDADO'">
+Eliminar
+</button>
             </td>
-
-
           </tr>
-
-
-
         </tbody>
-
-
       </table>
-
-
     </div>
-
-
-
-
-
     <div 
       *ngIf="!loading && !estudiantes.length"
       class="empty">
-
       No hay respuestas para mostrar.
-
     </div>
-
-
   </div>
-
 </div>
-
-
-
-
-
 <!-- ========================= -->
 <!-- MODAL DETALLE ESTUDIANTE -->
 <!-- ========================= -->
@@ -241,82 +134,36 @@
 <div 
  class="modal"
  *ngIf="modalVisible && estudianteSeleccionado">
-
-
  <div class="modal-content">
-
-
-
-    <button
+   <button
       class="cerrar"
       (click)="modalVisible=false">
-
       X
-
     </button>
-
-
-
     <h2>
-
       {{estudianteSeleccionado.nombres}}
-
     </h2>
-
-
-
     <h3>
-
       Semestre:
       {{estudianteSeleccionado.semestre}}
-
     </h3>
-
-
-
-
-    <table>
-
-
+   <table>
       <thead>
-
        <tr>
-
 <th>Pregunta</th>
-
 <th>Categoría</th>
-
 <th>Actividad</th>
-
 <th>Día</th>
-
 <th>Horas</th>
-
 </tr>
      </thead>
       <tbody>
           <tr *ngFor="let d of detalle">
-
-<td>
-Pregunta {{d.seccion}}
-</td>
-
-<td>
-{{d.categoria}}
-</td>
-
-<td>
-{{d.actividad}}
-</td>
-
-<td>
-{{d.dia}}
-</td>
-
-<td>
-{{d.horas}}
-</td>
-
+<td> Pregunta {{d.seccion}}</td>
+<td> {{d.categoria}} </td>
+<td> {{d.actividad}} </td>
+<td> {{d.dia}} </td>
+<td> {{d.horas}} </td>
 </tr>
       </tbody>
     </table>
