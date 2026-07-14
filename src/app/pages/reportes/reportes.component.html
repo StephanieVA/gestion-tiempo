@@ -96,22 +96,24 @@ class="btn"
 (click)="verDetalle(est)">
 Ver detalle
 </button>
+<!-- SOLO PENDIENTES -->
 <button
+*ngIf="est.estado !== 'VALIDADO'"
 class="btn btn-success"
-(click)="validar(est)"
-*ngIf="est.estado==='PENDIENTE'">
+(click)="validar(est)">
 Validar
 </button>
+<!-- SOLO VALIDADOS -->
 <button
+*ngIf="est.estado === 'VALIDADO'"
 class="btn btn-warning"
-(click)="editar(est)"
-*ngIf="est.estado==='VALIDADO'">
+(click)="editar(est)">
 Editar
 </button>
 <button
+*ngIf="est.estado === 'VALIDADO'"
 class="btn btn-danger"
-(click)="eliminar(est)"
-*ngIf="est.estado==='VALIDADO'">
+(click)="eliminar(est)">
 Eliminar
 </button>
             </td>
