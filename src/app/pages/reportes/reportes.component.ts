@@ -217,6 +217,23 @@ this.estudianteEditar={
 };
 this.modalEditar=true;
 }
+
+  guardarEditar(){
+this.http.put<any>(
+`${this.api}/editar-estudiante`,
+this.estudianteEditar
+)
+.subscribe({
+next:(r)=>{
+console.log(r);
+this.modalEditar=false;
+this.cargar();
+},
+error:(e)=>{
+console.log(e);
+}
+});
+}
   
   validar(est:any){
 this.http.put<any>(
