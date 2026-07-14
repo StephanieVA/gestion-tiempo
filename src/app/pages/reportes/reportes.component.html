@@ -171,3 +171,35 @@ Eliminar
     </table>
  </div>
 </div>
+
+<div class="modal" *ngIf="modalEditar">
+<div class="modal-content">
+<h2>
+Editar estudiante
+</h2>
+<label>
+Nombre
+</label>
+<input
+class="form-control"
+[(ngModel)]="estudianteEditar.nombres"
+disabled>
+<label>
+DNI
+</label>
+<input
+class="form-control"
+[(ngModel)]="estudianteEditar.dni">
+<button
+class="btn btn-success"
+(click)="guardarEditar()">
+Guardar
+</button>
+<button
+class="btn btn-secondary"
+(click)="modalEditar=false">
+Cancelar
+</button>
+</div>
+
+</div>
