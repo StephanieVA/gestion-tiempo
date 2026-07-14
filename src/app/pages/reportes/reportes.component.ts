@@ -104,7 +104,8 @@ this.http.get<any[]>(
 {
 params:{
 nombre: estudiante.nombres,
-semestre: estudiante.semestre
+semestre: estudiante.semestre,
+encuesta_id: estudiante.encuesta_id
 }
 }
 )
