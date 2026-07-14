@@ -96,6 +96,7 @@ export class ReportesComponent {
         this.loading=false;
       }
     });
+    console.log(this.estudiantes);
  }
 verDetalle(estudiante:any){
 this.estudianteSeleccionado = estudiante;
