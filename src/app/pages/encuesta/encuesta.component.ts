@@ -248,33 +248,48 @@ datos
 this.api.guardarEncuesta(datos)
 .subscribe({
 
-next:(resp:any)=>{
+  next:(resp:any)=>{
+
+    alert("Encuesta registrada correctamente");
 
 
-alert(
-"Encuesta registrada correctamente"
-);
+    // Limpiar datos personales
+    this.persona = {
+      dni:'',
+      apellidos_nombres:'',
+      edad:'',
+      sexo:'',
+      semestre:'',
+      seccion:''
+    };
 
 
-},
+    // Limpiar cursos cargados
+    this.cursos = [];
 
 
-error:(error)=>{
+    // Limpiar respuestas
+    this.respuestasPregunta1 = [];
+    this.respuestasPregunta2 = [];
+    this.respuestasPregunta3 = [];
 
 
-console.log(error);
+    // Regresar al inicio
+    this.paso = 1;
 
 
-alert(
-"Error al guardar encuesta"
-);
+  },
 
 
-}
+  error:(error)=>{
 
+    console.log(error);
+
+    alert("Error al guardar encuesta");
+
+  }
 
 });
-
 
 }
 }
