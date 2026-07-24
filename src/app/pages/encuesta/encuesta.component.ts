@@ -11,86 +11,42 @@ import { EncuestaService } from '../../services/encuesta.service';
   styleUrls: ['./encuesta.component.css']
 })
 export class EncuestaComponent {
-
-
   constructor(private api: EncuestaService) {}
-
-
   persona = {
-
     dni: '',
-
     apellidos_nombres: '',
-
     edad: '',
-
     sexo: '',
-
-    semestre: ''
-
+    semestre: '',
+     seccion: ''
   };
-
-
   paso = 1;
-
   mensajeError = '';
-
-
   cursos: any[] = [];
-
-
   respuestasPregunta1: any[] = [];
-
-  respuestasPregunta2: any[] = [];
-
+ respuestasPregunta2: any[] = [];
   respuestasPregunta3: any[] = [];
-
-
 
   // ==========================
   // VALIDAR DNI
   // ==========================
-
   validarDni() {
-
-
     if(this.persona.dni.length !== 8){
-
       return;
-
     }
-
-
     this.api.validarDni(this.persona.dni)
     .subscribe({
-
       next:(resp:any)=>{
-
-
-        if(resp.existe){
-
-
+       if(resp.existe){
           alert(
             'El DNI ya se encuentra registrado'
           );
-
-
-          this.persona.dni='';
-
-
+         this.persona.dni='';
         }
-
-
       },
-
-
       error:(err)=>{
-
         console.log(err);
-
       }
-
-
     });
 
 
@@ -165,14 +121,11 @@ export class EncuestaComponent {
     if(
 
       !this.persona.dni ||
-
       !this.persona.apellidos_nombres ||
-
-      !this.persona.edad ||
-
+     !this.persona.edad ||
       !this.persona.sexo ||
-
-      !this.persona.semestre
+      !this.persona.semestre || 
+      !this.persona.seccion
 
     ){
 
