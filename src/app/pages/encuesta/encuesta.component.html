@@ -137,87 +137,63 @@
 
             <div *ngIf="paso==2">
 
-                <h5>
+            <h5>
+Pregunta 1
+</h5>
 
-                    Pregunta 1
+<p>
+Durante el semestre académico 2026-I,
+¿has recibido tutoría académica de las siguientes asignaturas?
+</p>
 
-                </h5>
 
-                <p>
+<table class="table table-bordered">
 
-                    Durante el semestre académico 2026-I,
-                    ¿has recibido tutoría académica de las siguientes asignaturas?
+<thead>
 
-                </p>
+<tr>
 
-                <table class="table table-bordered">
+<th>
+Curso
+</th>
 
-                    <thead>
+<th>
+Sí
+</th>
 
-                        <tr>
-
-                            <th>
-
-                                Curso
-
-                            </th>
-
-                            <th class="text-center">
-
-                                Sí
-
-                            </th>
-
-                            <th class="text-center">
-
-                                No
-
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        <tr *ngFor="let curso of respuestasPregunta1">
-
-                            <td>
-
-                                {{curso.nombre}}
-
-                            </td>
-
-                            <td class="text-center">
-
-                                <input
-                                    type="radio"
-                                    [name]="'curso'+curso.idCurso"
-                                    value="SI"
-                                    [(ngModel)]="curso.respuesta">
-
-                            </td>
-
-                            <td class="text-center">
-
-                                <input
-                                    type="radio"
-                                    [name]="'curso'+curso.idCurso"
-                                    value="NO"
-                                    [(ngModel)]="curso.respuesta">
-
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
+<th>
+No
+</th>
+</tr>
+</thead>
+<tbody>
+<tr *ngFor="let curso of respuestasPregunta1">
+<td>
+{{curso.nombre}}
+</td>
+<td>
+<input
+type="radio"
+[name]="'curso'+curso.idCurso"
+value="SI"
+[(ngModel)]="curso.respuesta">
+</td>
+<td>
+<input
+type="radio"
+[name]="'curso'+curso.idCurso"
+value="NO"
+[(ngModel)]="curso.respuesta">
+</td>
+</tr>
+</tbody>
+</table>
+<button
+class="btn btn-primary"
+(click)="continuarPregunta1()">
+Siguiente
+</button>
             </div>
-
         </div>
-
     </div>
-
 </div>
