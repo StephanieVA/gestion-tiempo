@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class EncuestaService {
 
-  private api = 'http://backend-gestion-production-b3b8.up.railway.app/api/encuesta';
+  private api = 'http://backend-gestion-production-b3b7.up.railway.app/api/encuesta';
 
   constructor(private http: HttpClient) {}
 
