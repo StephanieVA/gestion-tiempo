@@ -52,98 +52,51 @@ export class EncuestaComponent {
 
   }
 
-
-
-
-
   // ==========================
   // CARGAR CURSOS POR SEMESTRE
   // ==========================
-
   onSemestreChange(){
-
-
     if(!this.persona.semestre){
-
       return;
-
     }
-
-
     this.api.obtenerCursos(this.persona.semestre)
     .subscribe({
 
       next:(resp:any)=>{
-
-
         console.log(
           "Cursos recibidos:",
           resp
         );
-
-
         this.cursos = resp;
-
-
       },
-
-
       error:(err)=>{
-
-
         console.log(
           "Error cursos:",
           err
         );
-
-
       }
-
-
     });
-
-
   }
-
-
-
-
-
-
-  // ==========================
+ // ==========================
   // PASAR DATOS A PREGUNTA 1
   // ==========================
 
 
   siguientePaso(){
-
-
-    if(
-
+   if(
       !this.persona.dni ||
       !this.persona.apellidos_nombres ||
      !this.persona.edad ||
       !this.persona.sexo ||
       !this.persona.semestre || 
       !this.persona.seccion
-
     ){
-
-
       alert(
         "Complete todos los datos personales"
       );
-
-
       return;
-
     }
-
-
-
     if(this.cursos.length===0){
-
-
       alert(
         "No existen cursos cargados"
       );
@@ -210,4 +163,25 @@ console.log(
       tipo:''
     }));
   }
+  continuarPregunta2(){
+const incompletos =
+this.respuestasPregunta2.some(
+r => !r.tipo
+);
+if(incompletos){
+alert(
+"Seleccione Individual o Grupal para todos los cursos"
+);
+return;
+}
+this.respuestasPregunta3 = 
+this.respuestasPregunta2.map(curso => ({
+idCurso: curso.idCurso,
+nombre: curso.nombre,
+modalidad:''
+}));
+this.paso=4;
+
+
+}
 }
