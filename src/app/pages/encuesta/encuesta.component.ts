@@ -41,16 +41,30 @@ respuestasPregunta3: any[] = [];
   });
 }
   onSemestreChange() {
+
   if (!this.persona.semestre) {
     return;
   }
+
   this.api.obtenerCursos(this.persona.semestre)
     .subscribe({
+
       next: (resp: any) => {
-       this.cursos = resp;
+
+        console.log("Cursos recibidos:", resp);
+
+        this.cursos = resp;
+
       },
-      error: (err) => console.log(err)
+
+      error: (err) => {
+
+        console.log("Error cursos:", err);
+
+      }
+
     });
+
 }
   siguientePaso(){
   if(
