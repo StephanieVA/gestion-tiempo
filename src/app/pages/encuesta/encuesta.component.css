@@ -1,1 +1,27 @@
+.card{
 
+    border-radius:12px;
+
+}
+
+table th{
+
+    background:#0d6efd;
+
+    color:white;
+
+    text-align:center;
+
+}
+
+table td{
+
+    vertical-align:middle;
+
+}
+
+h5{
+
+    font-weight:bold;
+
+}
