@@ -8,7 +8,7 @@ import { EncuestaService } from '../../services/encuesta.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './encuesta.component.html',
-  styleUrls: ['./encuesta.component.scss']
+  styleUrls: ['./encuesta.component.css']
 })
 export class EncuestaComponent {
 
