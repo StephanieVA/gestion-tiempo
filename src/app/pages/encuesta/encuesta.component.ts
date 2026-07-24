@@ -20,6 +20,9 @@ export class EncuestaComponent {
     sexo: '',
     semestre: ''
   };
+  paso = 1;
+mensajeError = '';
+respuestasPregunta1: any[] = [];
   cursos: any[] = [];
   validarDni() {
   if (this.persona.dni.length !== 8) {
@@ -46,6 +49,25 @@ export class EncuestaComponent {
       },
       error: (err) => console.log(err)
     });
+}
+  siguientePaso() {
+  this.mensajeError = '';
+  if (
+    !this.persona.dni ||
+    !this.persona.apellidos_nombres ||
+    !this.persona.edad ||
+    !this.persona.sexo ||
+    !this.persona.semestre
+  ) {
+    this.mensajeError = 'Complete todos los datos personales.';
+    return;
+  }
+  this.respuestasPregunta1 = this.cursos.map(curso => ({
+    idCurso: curso.id,
+    nombre: curso.nombre,
+    respuesta: ''
+  }));
+  this.paso = 2;
 }
 
 }
