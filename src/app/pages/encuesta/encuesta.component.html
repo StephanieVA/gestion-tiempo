@@ -263,71 +263,199 @@
 
 
     <!-- PASO 3 -->
-    <div *ngIf="paso==3">
 
-      <h2 class="titulo-seccion">
+<div *ngIf="paso==3">
+
+    <h2 class="titulo-seccion">
         Pregunta 2
-      </h2>
+    </h2>
 
 
-      <p class="descripcion">
+    <p class="descripcion">
         De ser tu respuesta afirmativa,
         ¿de qué manera se realizó la tutoría académica?
-      </p>
+    </p>
 
 
-      <table>
+    <table>
 
         <thead>
-          <tr>
-            <th>Asignatura</th>
-            <th>Individual</th>
-            <th>Grupal</th>
-          </tr>
+            <tr>
+                <th>Asignatura</th>
+                <th>Individual</th>
+                <th>Grupal</th>
+            </tr>
         </thead>
 
 
         <tbody>
 
-          <tr *ngFor="let curso of respuestasPregunta2">
+            <tr *ngFor="let curso of respuestasPregunta2">
 
-            <td>
-              {{curso.nombre}}
-            </td>
-
-
-            <td>
-
-              <input
-              type="radio"
-              [name]="'tipo'+curso.idCurso"
-              value="Individual"
-              [(ngModel)]="curso.tipo">
-
-            </td>
+                <td>
+                    {{curso.nombre}}
+                </td>
 
 
-            <td>
+                <td>
 
-              <input
-              type="radio"
-              [name]="'tipo'+curso.idCurso"
-              value="Grupal"
-              [(ngModel)]="curso.tipo">
+                    <input
+                    type="radio"
+                    [name]="'tipo'+curso.idCurso"
+                    value="Individual"
+                    [(ngModel)]="curso.tipo">
 
-            </td>
+                </td>
 
 
-          </tr>
+                <td>
+
+                    <input
+                    type="radio"
+                    [name]="'tipo'+curso.idCurso"
+                    value="Grupal"
+                    [(ngModel)]="curso.tipo">
+
+                </td>
+
+            </tr>
+
 
         </tbody>
 
-      </table>
+
+    </table>
 
 
-    </div>
+    <button
+    class="btn-principal"
+    (click)="continuarPregunta2()">
+
+        Continuar →
+
+    </button>
 
 
-  </div>
+</div>
+
+
+
+<!-- PASO 4 -->
+
+<div *ngIf="paso==4">
+
+
+    <h2 class="titulo-seccion">
+
+        Pregunta 3
+
+    </h2>
+
+
+    <p class="descripcion">
+
+        De ser tu respuesta afirmativa,
+        elige la modalidad en que se realizó la tutoría académica.
+
+    </p>
+
+
+
+    <table>
+
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    Asignatura
+                </th>
+
+                <th>
+                    Presencial
+                </th>
+
+                <th>
+                    Virtual
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+
+        <tbody>
+
+
+            <tr *ngFor="let curso of respuestasPregunta3">
+
+
+                <td>
+
+                    {{curso.nombre}}
+
+                </td>
+
+
+
+                <td>
+
+
+                    <input
+
+                    type="radio"
+
+                    [name]="'modalidad'+curso.idCurso"
+
+                    value="Presencial"
+
+                    [(ngModel)]="curso.modalidad">
+
+
+                </td>
+
+
+
+
+                <td>
+
+
+                    <input
+
+                    type="radio"
+
+                    [name]="'modalidad'+curso.idCurso"
+
+                    value="Virtual"
+
+                    [(ngModel)]="curso.modalidad">
+
+
+                </td>
+
+
+            </tr>
+
+
+        </tbody>
+
+
+    </table>
+
+
+
+
+    <button
+
+    class="btn-principal"
+
+    (click)="guardar()">
+
+        Finalizar encuesta
+
+    </button>
+
 
 </div>
