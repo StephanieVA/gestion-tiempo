@@ -1,0 +1,223 @@
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+
+            <h4>Encuesta de Tutoría Académica</h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <!-- PASO 1 -->
+
+            <div *ngIf="paso==1">
+
+                <h5 class="mb-4">
+
+                    Datos personales
+
+                </h5>
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+
+                        <label>DNI</label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            maxlength="8"
+                            [(ngModel)]="persona.dni"
+                            (blur)="validarDni()">
+
+                    </div>
+
+                    <div class="col-md-8 mb-3">
+
+                        <label>Apellidos y nombres</label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="persona.apellidos_nombres">
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <label>Edad</label>
+
+                        <input
+                            type="number"
+                            class="form-control"
+                            [(ngModel)]="persona.edad">
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <label>Sexo</label>
+
+                        <select
+                            class="form-select"
+                            [(ngModel)]="persona.sexo">
+
+                            <option value="">
+
+                                Seleccione
+
+                            </option>
+
+                            <option>
+
+                                Masculino
+
+                            </option>
+
+                            <option>
+
+                                Femenino
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+
+                        <label>Semestre</label>
+
+                        <select
+                            class="form-select"
+                            [(ngModel)]="persona.semestre"
+                            (change)="onSemestreChange()">
+
+                            <option value="">Seleccione</option>
+
+                            <option>I</option>
+                            <option>II</option>
+                            <option>III</option>
+                            <option>IV</option>
+                            <option>V</option>
+                            <option>VI</option>
+                            <option>VII</option>
+                            <option>VIII</option>
+                            <option>IX</option>
+                            <option>X</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="alert alert-danger"
+                    *ngIf="mensajeError">
+
+                    {{mensajeError}}
+
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    (click)="siguientePaso()">
+
+                    Siguiente
+
+                </button>
+
+            </div>
+
+            <!-- PASO 2 -->
+
+            <div *ngIf="paso==2">
+
+                <h5>
+
+                    Pregunta 1
+
+                </h5>
+
+                <p>
+
+                    Durante el semestre académico 2026-I,
+                    ¿has recibido tutoría académica de las siguientes asignaturas?
+
+                </p>
+
+                <table class="table table-bordered">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+
+                                Curso
+
+                            </th>
+
+                            <th class="text-center">
+
+                                Sí
+
+                            </th>
+
+                            <th class="text-center">
+
+                                No
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr *ngFor="let curso of respuestasPregunta1">
+
+                            <td>
+
+                                {{curso.nombre}}
+
+                            </td>
+
+                            <td class="text-center">
+
+                                <input
+                                    type="radio"
+                                    [name]="'curso'+curso.idCurso"
+                                    value="SI"
+                                    [(ngModel)]="curso.respuesta">
+
+                            </td>
+
+                            <td class="text-center">
+
+                                <input
+                                    type="radio"
+                                    [name]="'curso'+curso.idCurso"
+                                    value="NO"
+                                    [(ngModel)]="curso.respuesta">
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
