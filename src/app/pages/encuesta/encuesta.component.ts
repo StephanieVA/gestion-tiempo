@@ -23,6 +23,8 @@ export class EncuestaComponent {
   paso = 1;
 mensajeError = '';
 respuestasPregunta1: any[] = [];
+respuestasPregunta2: any[] = [];
+respuestasPregunta3: any[] = [];
   cursos: any[] = [];
   validarDni() {
   if (this.persona.dni.length !== 8) {
@@ -50,24 +52,54 @@ respuestasPregunta1: any[] = [];
       error: (err) => console.log(err)
     });
 }
-  siguientePaso() {
-  this.mensajeError = '';
-  if (
+  siguientePaso(){
+  if(
     !this.persona.dni ||
     !this.persona.apellidos_nombres ||
     !this.persona.edad ||
     !this.persona.sexo ||
     !this.persona.semestre
-  ) {
-    this.mensajeError = 'Complete todos los datos personales.';
+  ){
+    alert("Complete todos los datos personales");
     return;
   }
   this.respuestasPregunta1 = this.cursos.map(curso => ({
     idCurso: curso.id,
     nombre: curso.nombre,
-    respuesta: ''
-  }));
+    respuesta:''
+ }));
   this.paso = 2;
 }
+continuarPregunta1(){
 
+  const incompletos =
+    this.respuestasPregunta1.some(
+      r => !r.respuesta
+    );
+  if(incompletos){
+    alert(
+      "Seleccione Sí o No para todos los cursos" );
+    return;
+  }
+  const tieneTutorias =
+    this.respuestasPregunta1.some(
+      r => r.respuesta === 'SI'
+    );
+  if(!tieneTutorias){
+    alert(
+      "Encuesta finalizada correctamente"
+    );
+    return;
+  }
+  this.respuestasPregunta2 =
+    this.respuestasPregunta1
+    .filter(r=>r.respuesta==='SI')
+    .map(curso=>({
+      idCurso:curso.idCurso,
+      nombre:curso.nombre,
+      respuesta:''
+    }));
+  this.paso=3;
+
+}
 }
