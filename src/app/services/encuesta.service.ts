@@ -18,4 +18,8 @@ export class EncuestaService {
   obtenerCursos(semestre: string): Observable<any> {
     return this.http.get(`${this.api}/cursos/${semestre}`);
   }
+  
+  guardarEncuesta(data:any){
+  return this.http.post(`${this.api}/guardar`,data);
+}
 }
