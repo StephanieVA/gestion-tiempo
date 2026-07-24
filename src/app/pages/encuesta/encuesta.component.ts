@@ -184,4 +184,97 @@ this.paso=4;
 
 
 }
+  guardar(){
+
+
+let respuestas:any[]=[];
+
+
+
+this.respuestasPregunta1
+.filter(c=>c.respuesta==='SI')
+.forEach(curso=>{
+
+
+const tipo =
+this.respuestasPregunta2.find(
+x=>x.idCurso===curso.idCurso
+);
+
+
+const modalidad =
+this.respuestasPregunta3.find(
+x=>x.idCurso===curso.idCurso
+);
+
+
+
+respuestas.push({
+
+idCurso:curso.idCurso,
+
+recibio:'SI',
+
+tipo:tipo?.tipo || '',
+
+modalidad:modalidad?.modalidad || ''
+
+});
+
+
+});
+
+
+
+const datos={
+
+
+persona:this.persona,
+
+respuestas:respuestas
+
+
+};
+
+
+
+console.log(
+"Datos enviados:",
+datos
+);
+
+
+
+this.api.guardarEncuesta(datos)
+.subscribe({
+
+next:(resp:any)=>{
+
+
+alert(
+"Encuesta registrada correctamente"
+);
+
+
+},
+
+
+error:(error)=>{
+
+
+console.log(error);
+
+
+alert(
+"Error al guardar encuesta"
+);
+
+
+}
+
+
+});
+
+
+}
 }
