@@ -183,6 +183,16 @@ export class EncuestaComponent {
       return;
     }
     this.prepararPregunta2();
+    this.prepararPregunta2();
+
+console.log(
+  "Pregunta 1:",
+  this.respuestasPregunta1
+);
+console.log(
+  "Pregunta 2:",
+  this.respuestasPregunta2
+);
     this.paso=3;
   }
   // ==========================
