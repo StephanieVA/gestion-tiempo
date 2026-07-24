@@ -220,18 +220,9 @@
                 class="alert alert-danger"
                 *ngIf="mensajeError">
 
-
-                    {{mensajeError}}
-
-
+                   {{mensajeError}}
                 </div>
-
-
-
-
-
-
-                <button
+             <button
                 class="btn btn-primary"
                 (click)="siguientePaso()">
 
@@ -275,10 +266,7 @@
                 </p>
 
 
-
-
-
-                <table class="table table-bordered">
+               <table class="table table-bordered">
 
 
 
@@ -536,45 +524,106 @@
                                 value="Grupal"
 
                                 [(ngModel)]="curso.tipo">
-
-
-
                             </td>
 
-
-
-
-
-                        </tr>
-
-
-
-
-                    </tbody>
-
-
-
-
+                       </tr>
+                   </tbody>
                 </table>
-
-
-
-
-
 
                 <button
 
-                class="btn btn-primary">
-
-
-
-                    Siguiente
-
-
-
-                </button>
-
+class="btn btn-primary"
+(click)="continuarPregunta2()">
+Siguiente
+</button>
            </div>
         </div>
     </div>
+  <!-- ==========================
+     PASO 4 PREGUNTA 3
+=========================== -->
+
+
+<div *ngIf="paso==4">
+
+
+<h5>
+Pregunta 3
+</h5>
+
+
+<p>
+
+De ser tu respuesta afirmativa,
+elige la modalidad en que se realizó la tutoría académica
+
+</p>
+
+
+
+<table class="table table-bordered">
+
+
+<thead>
+
+<tr>
+
+<th>
+Curso
+</th>
+
+<th>
+Presencial
+</th>
+
+<th>
+Virtual
+</th>
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody>
+
+
+<tr *ngFor="let curso of respuestasPregunta3">
+
+
+<td>
+
+{{curso.nombre}}
+
+</td>
+
+
+<td>
+
+
+<input
+
+type="radio"
+
+[name]="'modalidad'+curso.idCurso"
+value="Presencial"
+[(ngModel)]="curso.modalidad">
+</td>
+<td>
+<input
+type="radio"
+[name]="'modalidad'+curso.idCurso"
+value="Virtual"
+[(ngModel)]="curso.modalidad">
+</td>
+</tr>
+</tbody>
+</table>
+<button
+class="btn btn-success">
+Finalizar
+</button>
+</div>
 </div>
